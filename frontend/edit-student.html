@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Student</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./index.css" />
+</head>
+
+<body class="m-0 p-0">
+    <div class="container-fluid g-0 vh-100">
+        <div class="topbar flex-row w-100 align-center justify">
+            <div class="system-name d-flex flex-row h-100 justify-content-center align-items-center">
+                <p class="vault-name my-font-primary m-0">VaultED</p>
+                <div class="sysname-line"></div>
+                <div class="sysname-des d-flex flex-column">
+                    <p class="my-font-secondary m-0">
+                        Student Record <br />
+                        Management System
+                    </p>
+                </div>
+            </div>
+            <div class="uni-name"></div>
+        </div>
+        <div class="body-content d-flex flex-row">
+            <div class="sidebar d-flex flex-column">
+                <a href="/" class="sidebar-link">
+                    <div class="sidebar-item d-flex flex-row align-items-center gap-4">
+                        <img src="./static/icons/user.png" class="sidebar-item-icon" alt="">
+                        <p>All Students</p>
+                    </div>
+                </a>
+                <a href="./add-new-student.html" class="sidebar-link">
+                    <div class="sidebar-item d-flex flex-row align-items-center gap-4">
+                        <img src="./static/icons/add.png" class="sidebar-item-icon" alt="">
+                        <p>Add New Students</p>
+                    </div>
+                </a>
+                <a href="./recently-deleted.html" class="sidebar-link">
+                    <div class="sidebar-item d-flex flex-row align-items-center gap-4">
+                        <img src="./static/icons/delete.png" class="sidebar-item-icon" alt="">
+                        <p>Recently Deleted Students</p>
+                    </div>
+                </a>
+            </div>
+            <div class="root-content">
+                <div class="container py-5">
+                    <div class="d-flex justify-content-end">
+                        <div class="form-container shadow bg-light p-4" style="width: 100%;">
+                            <div class="mb-4 p-2">
+                                <h2 class="form-title text-left mx-3" style="font-size: 1.7rem;font-weight: bold;">
+                                    Edit Student
+                                </h2>
+                            </div>
+                            <div>
+                                <form id="studentForm">
+                                    <div class="d-flex">
+                                        <div class="flex-fill me-3">
+                                            <div class="mb-3">
+                                                <label for="sid" class="form-label">Student ID</label>
+                                                <input type="number" class="form-control" id="sid" readonly>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="firstName" class="form-label">First Name</label>
+                                                <input type="text" class="form-control" id="firstName">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="guardianName" class="form-label">Guardian Name</label>
+                                                <input type="text" class="form-control" id="guardianName">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="course" class="form-label">Course</label>
+                                                <select id="course" class="form-select">
+                                                    <option value="Degree">Degree</option>
+                                                    <option value="Foundation">Foundation</option>
+                                                    <option value="Diploma">Diploma</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="flex-fill ms-3">
+                                            <div class="mb-3">
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="email">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="lastName" class="form-label">Last Name</label>
+                                                <input type="text" class="form-control" id="lastName">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="nearestCity" class="form-label">Nearest City</label>
+                                                <input type="text" class="form-control" id="nearestCity">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="subjects" class="form-label">Subjects Following</label>
+                                                <input type="text" class="form-control" id="subjects">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="w-100 d-flex justify-content-end gap-3">
+                                        <button type="button" class="btn btn-secondary me-2" id="cancelButton">
+                                            Cancel
+                                        </button>
+                                        <button type="button" id="updateBySID" class="btn btn-primary">Update Student By SID</button>
+                                        <button type="button" id="updateByFname" class="btn btn-primary">Update Student By First Name</button>
+                                    </div>
+                                </form>
+                                <div id="alertMessage" class="mt-3" style="display: none;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        const studentId = new URLSearchParams(window.location.search).get('sid'); // Get student ID from URL
+        const studentName = new URLSearchParams(window.location.search).get('fname');
+
+        $(document).ready(function () {
+            // Fetch existing student data
+            $.ajax({
+                url: `http://localhost:3000/students/sid/${studentId}`,
+                method: 'GET',
+                success: function (student) {
+                    $('#sid').val(student.SID);
+                    $('#firstName').val(student.FirstName);
+                    $('#lastName').val(student.LastName);
+                    $('#email').val(student.Email);
+                    $('#nearestCity').val(student.NearCity);
+                    $('#course').val(student.Course);
+                    $('#guardianName').val(student.Guardian);
+                    $('#subjects').val(student.Subjects.join(', '));
+                },
+                error: function () {
+                    $('#alertMessage')
+                        .addClass('alert alert-danger')
+                        .text('Failed to load student data.')
+                        .show();
+                }
+            });
+
+            // Handle form submission for update
+            $('#updateBySID').on('click', function (event) {
+                const updatedData = {
+                    SID: Number($('#sid').val()),
+                    FirstName: $('#firstName').val(),
+                    LastName: $('#lastName').val(),
+                    Email: $('#email').val(),
+                    NearCity: $('#nearestCity').val(),
+                    Course: $('#course').val(),
+                    Guardian: $('#guardianName').val(),
+                    Subjects: $('#subjects').val().split(',').map(sub => sub.trim())
+                };
+
+                $.ajax({
+                    url: `http://localhost:3000/students/sid/${studentId}`,
+                    method: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(updatedData),
+                    success: function () {
+                        $('#alertMessage')
+                            .addClass('alert alert-success')
+                            .text('Student updated successfully!')
+                            .show();
+
+                            window.location.href = `/student.html?sid=${studentId}`;
+                    },
+                    error: function () {
+                        $('#alertMessage')
+                            .addClass('alert alert-danger')
+                            .text('Failed to update student.')
+                            .show();
+                    }
+                });
+            });
+
+            $('#updateByFname').on('click', function (event) {
+                const updatedData = {
+                    SID: Number($('#sid').val()),
+                    FirstName: $('#firstName').val(),
+                    LastName: $('#lastName').val(),
+                    Email: $('#email').val(),
+                    NearCity: $('#nearestCity').val(),
+                    Course: $('#course').val(),
+                    Guardian: $('#guardianName').val(),
+                    Subjects: $('#subjects').val().split(',').map(sub => sub.trim())
+                };
+
+                $.ajax({
+                    url: `http://localhost:3000/students/firstname/${studentName}`,
+                    method: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(updatedData),
+                    success: function () {
+                        $('#alertMessage')
+                            .addClass('alert alert-success')
+                            .text('Student updated successfully!')
+                            .show();
+                            window.location.href = `/student.html?sid=${studentId}`;
+                    },
+                    error: function () {
+                        $('#alertMessage')
+                            .addClass('alert alert-danger')
+                            .text('Failed to update student.')
+                            .show();
+                    }
+                });
+            });
+
+            // Cancel button redirect
+            $('#cancelButton').on('click', function () {
+                window.location.href = '/';
+            });
+        });
+    </script>
+</body>
+
+</html>

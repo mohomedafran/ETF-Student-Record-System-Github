@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Creation</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./index.css" />
+    <style>
+        .student-delete-popup .popup-container {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(22, 22, 22, 0.5);
+        }
+
+        .student-delete-popup .popup-box {
+            position: relative;
+            margin: 0 auto;
+            top: 30%;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            width: 400px;
+        }
+
+        .student-delete-popup .popup-buttons {
+            display: flex;
+            justify-content: right;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .student-delete-popup .cancel-button {
+            background-color: #676fa3;
+            color: white;
+            border: none;
+            text-align: center;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body class="m-0 p-0">
+    <div class="container-fluid g-0 vh-100">
+        <div class="topbar flex-row w-100 align-center justify">
+            <div class="system-name d-flex flex-row h-100 justify-content-center align-items-center">
+                <p class="vault-name my-font-primary m-0">VaultED</p>
+                <div class="sysname-line"></div>
+                <div class="sysname-des d-flex flex-column">
+                    <p class="my-font-secondary m-0">
+                        Student Record <br />
+                        Management System
+                    </p>
+                </div>
+            </div>
+            <div class="uni-name"></div>
+        </div>
+        <div class="body-content d-flex flex-row">
+            <div class="sidebar d-flex flex-column">
+                <a href="/" class="sidebar-link">
+                    <div class="sidebar-item item-active d-flex flex-row align-items-center gap-4">
+                        <img src="./static/icons/user.png" class="sidebar-item-icon" alt="">
+                        <p>All Students</p>
+                    </div>
+                </a>
+                <a href="./add-new-student.html" class="sidebar-link">
+                    <div class="sidebar-item d-flex flex-row align-items-center gap-4">
+                        <img src="./static/icons/add.png" class="sidebar-item-icon" alt="">
+                        <p>Add New Students</p>
+                    </div>
+                </a>
+                <a href="./recently-deleted.html" class="sidebar-link">
+                    <div class="sidebar-item d-flex flex-row align-items-center gap-4">
+                        <img src="./static/icons/delete.png" class="sidebar-item-icon" alt="">
+                        <p>Recently Deleted Students</p>
+                    </div>
+                </a>
+
+            </div>
+            <div class="root-content student-details">
+                <div class="student-details-container container py-5">
+                    <h3>Student Details</h3>
+                    <div id="student-details" class="student-details d-flex flex-column gap-3">
+                        <!-- Details will be dynamically inserted here -->
+                    </div>
+
+                    <div class="action-buttons d-flex gap-3 mt-4">
+                        <button id="edit-btn" class="btn btn-primary">Edit</button>
+                        <button id="delete-btn" class="btn btn-danger delete-action-btn">Delete</button>
+                        <button id="back-btn" class="btn btn-secondary">Back to All Students</button>
+                    </div>
+                </div>
+
+                <!-- Popup for Delete Confirmation -->
+                <div class="popup-container home-delete-popup" id="popup">
+                    <div class="popup-box">
+                        <h5>Confirm Delete</h5>
+                        <p>Are you sure you want to delete this student <br>
+                            <strong><span id="student-id-display" style="color:red"></span>?</strong>
+                        </p>
+                        <div class="popup-buttons">
+                            <button class="cancel-button" id="cancel-popup-btn">
+                                Cancel
+                            </button>
+                            <button class="btn btn-danger" id="delete-Student-btn">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="./script.js"></script>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const studentDetailsContainer = document.querySelector('#student-details');
+            const backBtn = document.querySelector('#back-btn');
+            const editBtn = document.querySelector('#edit-btn');
+            const deleteBtn = document.querySelector('#delete-btn');
+            const popup = document.querySelector('#popup');
+            const cancelPopupBtn = document.querySelector('#cancel-popup-btn');
+            const confirmDeleteBtn = document.querySelector('#confirm-delete-btn');
+            const studentIdDisplay = document.querySelector('#student-id-display');
+
+            // Extract the student ID from the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const studentId = urlParams.get('sid');
+            let studentName;
+
+            // Fetch and display student details
+            if (studentId) {
+                fetch(`http://localhost:3000/students/sid/${studentId}`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data) {
+                            studentName = data.FirstName;
+                            studentDetailsContainer.innerHTML = `
+                        <p><strong>Student ID:</strong> ${data.SID}</p>
+                        <p><strong>First Name:</strong> ${data.FirstName}</p>
+                        <p><strong>Last Name:</strong> ${data.LastName}</p>
+                        <p><strong>Email:</strong> ${data.Email}</p>
+                        <p><strong>Course:</strong> ${data.Course}</p>
+                        <p><strong>Nearest City:</strong> ${data.NearCity}</p>
+                        <p><strong>Guardian:</strong> ${data.Guardian}</p>
+                        <p><strong>Subjects:</strong> ${data.Subjects.join(', ')}</p>
+                    `;
+                        } else {
+                            studentDetailsContainer.innerHTML = `<p class="text-danger">Student not found!</p>`;
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error fetching student details:', error);
+                        studentDetailsContainer.innerHTML = `<p class="text-danger">Failed to load student details!</p>`;
+                    });
+            }
+
+            // Go back to all students page
+            backBtn.addEventListener('click', () => {
+                window.location.href = '/';
+            });
+
+            // Open edit page
+            editBtn.addEventListener('click', () => {
+                window.location.href = `/edit-student.html?sid=${studentId}&fname=${studentName}`;
+            });
+
+            // Open delete confirmation pop-up
+            // deleteBtn.addEventListener('click', () => {
+            //     studentIdDisplay.textContent = studentId;
+            //     popup.style.display = 'flex';
+            // });
+
+            // // Cancel delete
+            // cancelPopupBtn.addEventListener('click', () => {
+            //     popup.style.display = 'none';
+            // });
+
+            // // Confirm delete
+            // confirmDeleteBtn.addEventListener('click', () => {
+            //     fetch(`/students/sid/${studentId}`, { method: 'DELETE' })
+            //         .then((response) => {
+            //             if (response.ok) {
+            //                 alert('Student deleted successfully!');
+            //                 window.location.href = '/';
+            //             } else {
+            //                 alert('Error deleting student!');
+            //             }
+            //         })
+            //         .catch((error) => {
+            //             console.error('Error deleting student:', error);
+            //             alert('Error deleting student!');
+            //         });
+            // });
+
+            $(document).on("click", ".delete-action-btn", function () {
+                console.log("delete icon clicked");
+
+                $("#student-id-display").text(studentId);
+                $("#popup").fadeIn();
+            });
+
+            $("#cancel-popup-btn").on("click", function () {
+                $("#popup").fadeOut();
+            });
+
+            $("#delete-Student-btn").on("click", function () {
+                if (studentId) {
+                    $.ajax({
+                        url: `http://localhost:3000/students/sid/${studentId}`,
+                        method: "DELETE",
+                        success: function (response) {
+                            $("#popup").fadeOut();
+                            window.location.href = '/';
+                        },
+                        error: function (xhr) {
+                            alert(
+                                `Error: ${xhr.responseJSON?.message || "Failed to delete student"
+                                }`
+                            );
+                        },
+                    });
+                }
+            });
+        });
+
+    </script>
+</body>
+
+</html>

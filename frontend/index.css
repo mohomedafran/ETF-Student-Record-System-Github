@@ -1,0 +1,294 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
+
+
+
+
+:root {
+    --primary-color: #676FA3;
+    --secondary-color: #F7F7F7;
+}
+
+body {
+    margin: 0;
+    background-color: #EEF2FF;
+}
+
+.my-font-primary {
+    font-family: "Montserrat", serif;
+    font-weight: bold;
+}
+
+.my-font-secondary-bold {
+    font-family: "Source Sans 3", serif;
+    font-weight: bold;
+}
+
+.my-font-secondary {
+    font-family: "Source Sans 3", serif;
+}
+
+.topbar {
+    height: 130px;
+    background-color: #FFFFFF;
+    box-shadow: 0px 6px 15px -4px rgba(0, 0, 0, 0.3);
+    /* z-index: 10; */
+}
+
+.topbar .system-name {
+    width: 20%;
+    border-right: 2px solid var(--primary-color);
+    gap: 20px;
+}
+
+.topbar .sysname-line {
+    width: 2px;
+    background-color: #9E9E9E;
+    height: 40px;
+}
+
+.topbar .vault-name {
+    font-size: 30px;
+    color: var(--primary-color);
+}
+
+.topbar .sysname-des {
+    font-size: 16px;
+    line-height: 18px;
+    color: var(--primary-color);
+}
+
+.body-content {
+    display: flex;
+    width: 100%;
+    min-height: calc(100vh - 150px);
+}
+
+.sidebar {
+    padding-top: 50px;
+    padding-left: 20px;
+    background-color: #FFFFFF;
+    width: calc(20% - 2px);
+    gap: 6px;
+    border-top: 2px solid var(--primary-color);
+    box-shadow: 0px 6px 15px -4px rgba(0, 0, 0, 0.3);
+    /* border-right: 2px solid var(--primary-color); */
+    /* z-index: -1; */
+}
+
+.sidebar-link {
+    height: min-content;
+    width: auto;
+    text-decoration: none;
+}
+
+.sidebar-item {
+    border-radius: 5px;
+    width: 85%;
+    height: 40px;
+    padding-left: 30px;
+}
+
+.sidebar-item p {
+    font-size: 18px;
+    color: var(--primary-color);
+    margin: 0;
+    padding: 0;
+    line-height: 18px;
+}
+
+.sidebar-item:hover {
+    background-color: #EEF2FF;
+}
+
+.sidebar-item-icon {
+    width: 20px;
+}
+
+.item-active {
+    background-color: #EEF2FF;
+    font-weight: bold;
+}
+
+.root-content {
+    flex-grow: 1;
+    margin-top: 20px;
+    max-width: 100%;
+    width: 80%;
+}
+
+.searchSelection {
+    font-size: 14px;
+    /* height: 22px; */
+    padding: 5px;
+    background-color: transparent;
+}
+
+.search-row {
+    gap: 40px;
+}
+
+
+.search-selection-box p {
+    padding: 0;
+    margin: 0;
+    font-size: 18px;
+    line-height: 18px;
+}
+
+.searchInput {
+    font-size: 14px;
+    /* height: 22px; */
+    width: 300px;
+    padding: 5px;
+    background-color: transparent;
+}
+
+.searchBtn {
+    background-color: var(--primary-color);
+    color: #F7F7F7;
+    width: 100px;
+}
+
+.popup-container {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(22, 22, 22, 0.5);
+  }
+
+  .popup-box {
+    position: relative;
+    margin: 0 auto;
+    top: 30%;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    width: 400px;
+  }
+
+  .popup-buttons {
+    display: flex;
+    justify-content: right;
+    gap: 10px;
+    margin-top: 15px;
+  }
+
+  .cancel-button {
+    background-color: #676fa3;
+    color: white;
+    border: none;
+    text-align: center;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+  }
+
+
+
+
+
+ /* Enhancements for Student Details */
+.student-details-container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.student-details h3 {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+.student-details p {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.action-buttons button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.action-buttons button:hover {
+    opacity: 0.9;
+}
+
+.student-details-container #edit-btn {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.student-details-container #delete-btn {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.student-details-container #back-btn {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+.student-details-container .popup-container {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(22, 22, 22, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.student-details-container .popup-box {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    width: 400px;
+    text-align: center;
+}
+
+.student-details-container .popup-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.student-details-container .cancel-button {
+    background-color: #676fa3;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.student-details-container .cancel-button:hover {
+    opacity: 0.8;
+}
+
+.student-details-container #confirm-delete-btn {
+    background-color: #dc3545;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.student-details-container #confirm-delete-btn:hover {
+    opacity: 0.8;
+}
+
